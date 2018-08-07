@@ -1,12 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D97451BA-6E97-4AA1-9332-2486056C7F57}"
 	ProjectSection(SolutionItems) = preProject
 		Build-Package.ps1 = Build-Package.ps1
-		global.json = global.json
 		SharedAssemblyInfo.cs = SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
@@ -14,9 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E7166D60-7B5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D48D7FE3-6141-483D-8C4A-5E10AA81A636}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNetTestNSpec", "src\DotNetTestNSpec\DotNetTestNSpec.xproj", "{53AEE478-DE4B-47B6-ADCF-DF34E4621340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetTestNSpec", "src\DotNetTestNSpec\DotNetTestNSpec.csproj", "{53AEE478-DE4B-47B6-ADCF-DF34E4621340}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "DotNetTestNSpec.Tests", "test\DotNetTestNSpec.Tests\DotNetTestNSpec.Tests.xproj", "{6A28B43E-3FA2-461D-BDC9-A61E6FBEC709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetTestNSpec.Tests", "test\DotNetTestNSpec.Tests\DotNetTestNSpec.Tests.csproj", "{6A28B43E-3FA2-461D-BDC9-A61E6FBEC709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,5 +38,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{53AEE478-DE4B-47B6-ADCF-DF34E4621340} = {E7166D60-7B5A-4103-9047-FD62A2F0A077}
 		{6A28B43E-3FA2-461D-BDC9-A61E6FBEC709} = {D48D7FE3-6141-483D-8C4A-5E10AA81A636}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F861FA69-D67A-4BC8-B8B8-3B9671CD1F8B}
 	EndGlobalSection
 EndGlobal
