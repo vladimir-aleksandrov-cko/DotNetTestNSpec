@@ -83,7 +83,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Discovery
                 Payload = JToken.FromObject(someTest),
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
     }
 
@@ -107,7 +107,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Discovery
                 Payload = null,
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
 
         [TestCase]

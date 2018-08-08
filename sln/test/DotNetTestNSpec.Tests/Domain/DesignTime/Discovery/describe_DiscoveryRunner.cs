@@ -100,7 +100,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Discovery
         [Test]
         public void it_should_notify_each_discovered_test()
         {
-            actualFoundTests.ShouldBeEquivalentTo(expectedTests);
+            actualFoundTests.Should().BeEquivalentTo(expectedTests);
         }
 
         [Test]

@@ -129,7 +129,7 @@ namespace DotNetTestNSpec.Tests.Domain
         {
             Action act = () => factory.Create(options);
 
-            act.ShouldThrow<DotNetTestNSpecException>();
+            act.Should().Throw<DotNetTestNSpecException>();
         }
     }
 
@@ -152,7 +152,7 @@ namespace DotNetTestNSpec.Tests.Domain
         {
             Action act = () => factory.Create(options);
 
-            act.ShouldThrow<DotNetTestNSpecException>();
+            act.Should().Throw<DotNetTestNSpecException>();
         }
     }
 }

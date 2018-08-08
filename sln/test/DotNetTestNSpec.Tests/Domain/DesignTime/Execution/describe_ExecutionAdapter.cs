@@ -113,13 +113,13 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
                 Payload = null,
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
 
         [TestCase]
         public void it_should_return_test_names()
         {
-            actuals.ShouldBeEquivalentTo(requestedTestNames);
+            actuals.Should().BeEquivalentTo(requestedTestNames);
         }
     }
 
@@ -143,7 +143,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
                 Payload = JToken.FromObject(someTest),
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
     }
 
@@ -183,7 +183,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
                 Payload = JToken.FromObject(someTestResult),
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
     }
 
@@ -207,7 +207,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
                 Payload = null,
             });
 
-            sentMessages.ShouldBeEquivalentTo(new[] { expected });
+            sentMessages.Should().BeEquivalentTo(new[] { expected });
         }
 
         [TestCase]

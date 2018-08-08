@@ -2,9 +2,8 @@
 
   <PropertyGroup>
     <VersionPrefix>0.2.1.0</VersionPrefix>
-    <TargetFrameworks>netcoreapp1.0</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>dotnet-test-nspec</AssemblyName>
-    <OutputType>Exe</OutputType>
     <PackageId>DotNetTestNSpec</PackageId>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>

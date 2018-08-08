@@ -51,7 +51,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
         {
             var expected = new NSpecCommandLineOptions(Data.NSpec.allOptions);
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -75,7 +75,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.Tags = null;
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -119,7 +119,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.FailFast = false;
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -143,7 +143,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.FormatterName = null;
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -167,7 +167,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.FormatterOptions = new Dictionary<string, string>();
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -191,7 +191,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.DebugChannel = false;
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -215,7 +215,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             expected.DebugTests = new string[0];
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -268,7 +268,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
                 "unknown3",
             };
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 
@@ -308,7 +308,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
 
             actual = parser.Parse(args);
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         bool SequenceIsAllowed(Queue<string> queue)
@@ -341,7 +341,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
                 UnknownArgs = new string[0],
             };
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

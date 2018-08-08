@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>.netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>DotNetTestNSpec.Tests</AssemblyName>
     <PackageId>DotNetTestNSpec.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -25,10 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-3" />
-    <PackageReference Include="FluentAssertions" Version="4.13.1" />
-    <PackageReference Include="Moq" Version="4.6.36-alpha" />
-    <PackageReference Include="NUnit" Version="3.4.1" />
+    <PackageReference Include="FluentAssertions" Version="5.4.1" />
+    <PackageReference Include="Moq" Version="4.9.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">

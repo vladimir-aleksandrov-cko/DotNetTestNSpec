@@ -73,7 +73,7 @@ namespace DotNetTestNSpec.Tests.IO.CommandLineInput
         {
             var expected = allOptions;
 
-            actual.ShouldBeEquivalentTo(expected);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

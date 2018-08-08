@@ -171,13 +171,13 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
         [Test]
         public void it_should_notify_each_started_test()
         {
-            actualStartedTests.ShouldBeEquivalentTo(expectedStartedTests);
+            actualStartedTests.Should().BeEquivalentTo(expectedStartedTests);
         }
 
         [Test]
         public void it_should_notify_each_completed_test_result()
         {
-            actualCompletedResults.ShouldBeEquivalentTo(expectedResults);
+            actualCompletedResults.Should().BeEquivalentTo(expectedResults);
         }
 
         [Test]
