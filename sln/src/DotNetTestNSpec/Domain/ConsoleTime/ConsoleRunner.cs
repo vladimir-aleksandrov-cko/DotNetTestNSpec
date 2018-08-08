@@ -4,7 +4,7 @@ namespace DotNetTestNSpec.Domain.ConsoleTime
 {
     public class ConsoleRunner : ITestRunner
     {
-        public ConsoleRunner(string testAssemblyPath, IControllerProxy controllerProxy,
+        public ConsoleRunner(string testAssemblyPath, IController controllerProxy,
             LaunchOptions.NSpecPart nspecOptions)
         {
             this.testAssemblyPath = testAssemblyPath;
@@ -25,7 +25,7 @@ namespace DotNetTestNSpec.Domain.ConsoleTime
         }
 
         readonly string testAssemblyPath;
-        readonly IControllerProxy controllerProxy;
+        readonly IController controllerProxy;
         readonly LaunchOptions.NSpecPart nspecOptions;
     }
 }

@@ -1,12 +1,13 @@
 ﻿using DotNetTestNSpec.Domain.Library;
 using Microsoft.Extensions.Testing.Abstractions;
+using NSpec.Api.Discovery;
 using System.Collections.Generic;
 
 namespace DotNetTestNSpec.Domain.DesignTime
 {
     public class ExecutionRunner : ITestRunner
     {
-        public ExecutionRunner(string testAssemblyPath, IControllerProxy controllerProxy,
+        public ExecutionRunner(string testAssemblyPath, IController controllerProxy,
             IExecutionAdapter adapter)
         {
             this.testAssemblyPath = testAssemblyPath;
@@ -29,7 +30,7 @@ namespace DotNetTestNSpec.Domain.DesignTime
         }
 
         readonly string testAssemblyPath;
-        readonly IControllerProxy controllerProxy;
+        readonly IController controllerProxy;
         readonly IExecutionAdapter adapter;
 
         const int dontCare = -1;

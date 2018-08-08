@@ -1,4 +1,6 @@
-﻿namespace DotNetTestNSpec.Domain.Library
+﻿using NSpec.Api.Discovery;
+
+namespace DotNetTestNSpec.Domain.Library
 {
     public interface IExecutionSink
     {

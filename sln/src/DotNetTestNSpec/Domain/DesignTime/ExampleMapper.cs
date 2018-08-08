@@ -1,5 +1,6 @@
 ﻿using DotNetTestNSpec.Domain.Library;
 using Microsoft.Extensions.Testing.Abstractions;
+using NSpec.Api.Discovery;
 using System;
 using System.Text.RegularExpressions;
 
@@ -9,15 +10,13 @@ namespace DotNetTestNSpec.Domain.DesignTime
     {
         public Test MapToTest(DiscoveredExample example)
         {
-            var test = new Test()
+            return new Test()
             {
                 FullyQualifiedName = example.FullName,
                 DisplayName = BeautifyForDisplay(example.FullName),
                 CodeFilePath = example.SourceFilePath,
                 LineNumber = example.SourceLineNumber,
             };
-
-            return test;
         }
 
         public TestResult MapToTestResult(ExecutedExample example, Test test)

@@ -16,7 +16,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
     {
         protected ExecutionRunner runner;
 
-        protected Mock<IControllerProxy> controllerProxy;
+        protected Mock<IController> controllerProxy;
         protected Mock<IExecutionConnection> connection;
         protected Mock<IExecutionAdapter> adapter;
 
@@ -26,7 +26,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Execution
         [SetUp]
         public virtual void setup()
         {
-            controllerProxy = new Mock<IControllerProxy>();
+            controllerProxy = new Mock<IController>();
 
             connection = new Mock<IExecutionConnection>();
 

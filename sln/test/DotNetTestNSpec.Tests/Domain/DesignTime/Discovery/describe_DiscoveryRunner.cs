@@ -15,7 +15,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Discovery
     {
         protected DiscoveryRunner runner;
 
-        protected Mock<IControllerProxy> controllerProxy;
+        protected Mock<IController> controllerProxy;
         protected Mock<IDiscoveryConnection> connection;
         protected Mock<IDiscoveryAdapter> adapter;
 
@@ -25,7 +25,7 @@ namespace DotNetTestNSpec.Tests.Domain.DesignTime.Discovery
         [SetUp]
         public virtual void setup()
         {
-            controllerProxy = new Mock<IControllerProxy>();
+            controllerProxy = new Mock<IController>();
 
             connection = new Mock<IDiscoveryConnection>();
 

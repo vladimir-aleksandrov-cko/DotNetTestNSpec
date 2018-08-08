@@ -2,6 +2,8 @@
 using DotNetTestNSpec.Domain.Library;
 using DotNetTestNSpec.Shared;
 using Newtonsoft.Json;
+using NSpec.Api;
+using NSpec.Api.Discovery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +11,11 @@ using System.Reflection;
 
 namespace DotNetTestNSpec.IO.Library
 {
-    public class ControllerProxy : IControllerProxy
+    public class ControllerWrapper : IController
     {
-        public ControllerProxy(Assembly nspecLibraryAssembly)
+        public ControllerWrapper(Assembly nspecLibraryAssembly)
         {
-            controller = CreateController(nspecLibraryAssembly);
+            controller = new NSpec.Api.Controller();
         }
 
         public int Run(
@@ -23,33 +25,17 @@ namespace DotNetTestNSpec.IO.Library
             IDictionary<string, string> formatterOptions,
             bool failFast)
         {
-            object methodResult = InvokeMethod(controller, runMethodName,
-                testAssemblyPath, tags, formatterClassName, formatterOptions, failFast);
-
-            int nrOfFailures = (int)methodResult;
-
-            return nrOfFailures;
+            return controller.Run(
+                 testAssemblyPath,
+                 tags,
+                 formatterClassName,
+                 formatterOptions,
+                 failFast);
         }
 
         public IEnumerable<DiscoveredExample> List(string testAssemblyPath)
         {
-            object methodResult = InvokeMethod(controller, listMethodName,
-                testAssemblyPath);
-
-            string jsonResult = (string)methodResult;
-
-            DiscoveredExample[] examples;
-
-            try
-            {
-                examples = JsonConvert.DeserializeObject<DiscoveredExample[]>(jsonResult);
-            }
-            catch (Exception ex)
-            {
-                throw new DotNetTestNSpecException(unknownResultErrorMessage.With(listMethodName, jsonResult), ex);
-            }
-
-            return examples;
+            return new ExampleSelector(testAssemblyPath).Start();
         }
 
         public void RunInteractive(
@@ -60,8 +46,11 @@ namespace DotNetTestNSpec.IO.Library
             Action<string> onExampleStarted = jsonArg => OnExampleStarted(sink, jsonArg);
             Action<string> onExampleCompleted = jsonArg => OnExampleCompleted(sink, jsonArg);
 
-            InvokeMethod(controller, runInteractiveMethodName,
-                testAssemblyPath, exampleFullNames, onExampleStarted, onExampleCompleted);
+            controller.RunInteractive(
+                testAssemblyPath, 
+                exampleFullNames, 
+                onExampleCompleted, 
+                onExampleCompleted);
         }
 
         static void OnExampleStarted(IExecutionSink sink, string jsonArg)
@@ -98,22 +87,6 @@ namespace DotNetTestNSpec.IO.Library
             sink.ExampleCompleted(example);
         }
 
-        static object CreateController(Assembly nspecLibraryAssembly)
-        {
-            try
-            {
-                var typeInfo = nspecLibraryAssembly.DefinedTypes.Single(t => t.FullName == controllerTypeName);
-
-                object controller = Activator.CreateInstance(typeInfo.AsType());
-
-                return controller;
-            }
-            catch (Exception ex)
-            {
-                throw new DotNetTestNSpecException(unknownDriverErrorMessage.With(controllerTypeName), ex);
-            }
-        }
-
         static object InvokeMethod(object controller, string methodName, params object[] args)
         {
             var controllerType = controller.GetType();
@@ -130,17 +103,10 @@ namespace DotNetTestNSpec.IO.Library
             return result;
         }
 
-        readonly object controller;
+        readonly Controller controller;
 
-        const string controllerTypeName = "NSpec.Api.Controller";
-
-        const string runMethodName = "Run";
-        const string listMethodName = "List";
         const string runInteractiveMethodName = "RunInteractive";
 
-        const string unknownDriverErrorMessage =
-            "Could not find known driver ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library.";
         const string unknownMethodErrorMessage =
             "Could not find known method ({0}) in referenced NSpec assembly: " +
             "please double check version compatibility between this runner and referenced NSpec library.";

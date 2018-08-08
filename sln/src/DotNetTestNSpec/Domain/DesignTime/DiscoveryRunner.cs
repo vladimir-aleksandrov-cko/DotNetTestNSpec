@@ -4,7 +4,7 @@ namespace DotNetTestNSpec.Domain.DesignTime
 {
     public class DiscoveryRunner : ITestRunner
     {
-        public DiscoveryRunner(string testAssemblyPath, IControllerProxy controllerProxy,
+        public DiscoveryRunner(string testAssemblyPath, IController controllerProxy,
             IDiscoveryAdapter adapter)
         {
             this.testAssemblyPath = testAssemblyPath;
@@ -32,7 +32,7 @@ namespace DotNetTestNSpec.Domain.DesignTime
         }
 
         readonly string testAssemblyPath;
-        readonly IControllerProxy controllerProxy;
+        readonly IController controllerProxy;
         readonly IDiscoveryAdapter adapter;
         readonly ExampleMapper exampleMapper;
 

@@ -2,6 +2,6 @@
 {
     public interface IProxyFactory
     {
-        IControllerProxy Create(string testAssemblyPath);
+        IController Create(string testAssemblyPath);
     }
 }
