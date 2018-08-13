@@ -7,7 +7,7 @@ namespace DotNetTestNSpec.Domain.DesignTime
 {
     public class ExecutionRunner : ITestRunner
     {
-        public ExecutionRunner(string testAssemblyPath, IController controllerProxy,
+        public ExecutionRunner(string testAssemblyPath, INspecController controllerProxy,
             IExecutionAdapter adapter)
         {
             this.testAssemblyPath = testAssemblyPath;
@@ -30,7 +30,7 @@ namespace DotNetTestNSpec.Domain.DesignTime
         }
 
         readonly string testAssemblyPath;
-        readonly IController controllerProxy;
+        readonly INspecController controllerProxy;
         readonly IExecutionAdapter adapter;
 
         const int dontCare = -1;

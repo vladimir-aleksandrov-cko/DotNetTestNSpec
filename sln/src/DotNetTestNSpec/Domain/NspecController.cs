@@ -9,14 +9,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DotNetTestNSpec.IO.Library
+namespace DotNetTestNSpec.Domain
 {
-    public class ControllerWrapper : IController
+    public class NspecController : INspecController
     {
-        public ControllerWrapper(Assembly nspecLibraryAssembly)
-        {
-            controller = new NSpec.Api.Controller();
-        }
+        const string runInteractiveMethodName = "RunInteractive";
+
+        const string unknownMethodErrorMessage =
+            "Could not find known method ({0}) in referenced NSpec assembly: " +
+            "please double check version compatibility between this runner and referenced NSpec library.";
+        const string unknownResultErrorMessage =
+            "Could not convert serialized result from known method ({0}) in referenced NSpec assembly: " +
+            "please double check version compatibility between this runner and referenced NSpec library." +
+            "Result: {1}.";
+        const string unknownArgumentErrorMessage =
+            "Could not convert serialized argument from known callback ({0}) in referenced NSpec assembly: " +
+            "please double check version compatibility between this runner and referenced NSpec library." +
+            "Argument: {1}.";
+
+        public NspecController() => controller = new NSpec.Api.Controller();
 
         public int Run(
             string testAssemblyPath,
@@ -47,9 +58,9 @@ namespace DotNetTestNSpec.IO.Library
             Action<string> onExampleCompleted = jsonArg => OnExampleCompleted(sink, jsonArg);
 
             controller.RunInteractive(
-                testAssemblyPath, 
-                exampleFullNames, 
-                onExampleCompleted, 
+                testAssemblyPath,
+                exampleFullNames,
+                onExampleCompleted,
                 onExampleCompleted);
         }
 
@@ -105,18 +116,6 @@ namespace DotNetTestNSpec.IO.Library
 
         readonly Controller controller;
 
-        const string runInteractiveMethodName = "RunInteractive";
 
-        const string unknownMethodErrorMessage =
-            "Could not find known method ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library.";
-        const string unknownResultErrorMessage =
-            "Could not convert serialized result from known method ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library." +
-            "Result: {1}.";
-        const string unknownArgumentErrorMessage =
-            "Could not convert serialized argument from known callback ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library." +
-            "Argument: {1}.";
     }
 }

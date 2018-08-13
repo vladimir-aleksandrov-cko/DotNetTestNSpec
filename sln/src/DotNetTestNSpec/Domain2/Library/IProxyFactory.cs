@@ -2,6 +2,6 @@
 {
     public interface IProxyFactory
     {
-        IController Create(string testAssemblyPath);
+        INspecController Create(string testAssemblyPath);
     }
 }

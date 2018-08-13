@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using DotNetTestNSpec.Domain.Library;
 using NSpec.Api.Discovery;
 
-namespace DotNetTestNSpec.Domain.Library
+namespace DotNetTestNSpec.Domain
 {
     // Interface for NSpec.Api.Wrapper
-    public interface IController
+    public interface INspecController
     {
         int Run(
             string testAssemblyPath,

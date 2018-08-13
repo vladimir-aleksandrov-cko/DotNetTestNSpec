@@ -14,7 +14,7 @@ namespace DotNetTestNSpec.Tests.Domain.ConsoleTime
     {
         protected ConsoleRunner runner;
 
-        protected Mock<IController> controllerProxy;
+        protected Mock<INspecController> controllerProxy;
 
         protected readonly LaunchOptions.NSpecPart nspecOptions = new LaunchOptions.NSpecPart()
         {
@@ -34,7 +34,7 @@ namespace DotNetTestNSpec.Tests.Domain.ConsoleTime
         [SetUp]
         public virtual void setup()
         {
-            controllerProxy = new Mock<IController>();
+            controllerProxy = new Mock<INspecController>();
 
             runner = new ConsoleRunner(testAssemblyPath, controllerProxy.Object, nspecOptions);
         }

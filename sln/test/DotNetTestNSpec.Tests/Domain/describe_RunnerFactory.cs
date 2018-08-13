@@ -25,7 +25,7 @@ namespace DotNetTestNSpec.Tests.Domain
         public virtual void setup()
         {
             var proxyFactory = new Mock<IProxyFactory>();
-            var controller = new Mock<IController>();
+            var controller = new Mock<INspecController>();
 
             var channelFactory = new Mock<IChannelFactory>();
 
