@@ -1,4 +1,4 @@
-namespace DotNetTestNSpec.Api
+namespace DotNetTestNSpec.Domain
 {
     public static class Constants
     {

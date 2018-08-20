@@ -1,5 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>DotNetTestNSpec.Tests</AssemblyName>
@@ -15,24 +14,20 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
   </PropertyGroup>
-
   <ItemGroup>
-    <Compile Include="..\..\SharedAssemblyInfo.cs" />
+    <Compile Include="..\..\SharedAssemblyInfo.cs"/>
   </ItemGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotNetTestNSpec\DotNetTestNSpec.csproj" />
+    <ProjectReference Include="..\..\src\DotNetTestNSpec\DotNetTestNSpec.csproj"/>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.4.1" />
-    <PackageReference Include="Moq" Version="4.9.0" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="FluentAssertions" Version="5.4.1"/>
+    <PackageReference Include="Moq" Version="4.9.0"/>
+    <PackageReference Include="NUnit" Version="3.10.1"/>
+    <PackageReference Include="Microsoft.Extensions.Testing.Abstractions" Version="*"/>
   </ItemGroup>
-
   <ItemGroup Condition=" '$(TargetFramework)' == 'net451' ">
-    <Reference Include="System" />
-    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System"/>
+    <Reference Include="Microsoft.CSharp"/>
   </ItemGroup>
-
 </Project>

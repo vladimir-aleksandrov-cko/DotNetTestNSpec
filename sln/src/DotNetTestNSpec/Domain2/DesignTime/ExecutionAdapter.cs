@@ -1,120 +1,120 @@
-﻿using DotNetTestNSpec.Domain.VisualStudio;
-using Microsoft.Extensions.Testing.Abstractions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
+﻿// using DotNetTestNSpec.Domain.VisualStudio;
+// using Microsoft.Extensions.Testing.Abstractions;
+// using Newtonsoft.Json;
+// using Newtonsoft.Json.Linq;
+// using System;
+// using System.Collections.Generic;
 
-namespace DotNetTestNSpec.Domain.DesignTime
-{
-    public class ExecutionAdapter : IExecutionAdapter
-    {
-        public ExecutionAdapter(IChannelFactory channelFactory)
-        {
-            this.channelFactory = channelFactory;
-        }
+// namespace DotNetTestNSpec.Domain.DesignTime
+// {
+//     public class ExecutionAdapter : IExecutionAdapter
+//     {
+//         public ExecutionAdapter(IChannelFactory channelFactory)
+//         {
+//             this.channelFactory = channelFactory;
+//         }
 
-        public IExecutionConnection Connect()
-        {
-            var channel = channelFactory.Create();
+//         public IExecutionConnection Connect()
+//         {
+//             var channel = channelFactory.Create();
 
-            return new Connection(channel);
-        }
+//             return new Connection(channel);
+//         }
 
-        readonly IChannelFactory channelFactory;
+//         readonly IChannelFactory channelFactory;
 
-        public class Connection : IExecutionConnection
-        {
-            public Connection(INetworkChannel channel)
-            {
-                this.channel = channel;
+//         public class Connection : IExecutionConnection
+//         {
+//             public Connection(INetworkChannel channel)
+//             {
+//                 this.channel = channel;
 
-                channel.Open();
-            }
+//                 channel.Open();
+//             }
 
-            public void Dispose()
-            {
-                SendMessage(new Message()
-                {
-                    MessageType = testCompletedMessageType,
-                });
+//             public void Dispose()
+//             {
+//                 SendMessage(new Message()
+//                 {
+//                     MessageType = testCompletedMessageType,
+//                 });
 
-                channel.Close();
-            }
+//                 channel.Close();
+//             }
 
-            public IEnumerable<string> GetTests()
-            {
-                SendMessage(new Message()
-                {
-                    MessageType = waitCommandMessageType,
-                });
+//             public IEnumerable<string> GetTests()
+//             {
+//                 SendMessage(new Message()
+//                 {
+//                     MessageType = waitCommandMessageType,
+//                 });
 
-                string jsonReceived = channel.Receive();
+//                 string jsonReceived = channel.Receive();
 
-                Message receivedMessage;
+//                 Message receivedMessage;
 
-                try
-                {
-                    receivedMessage = JsonConvert.DeserializeObject<Message>(jsonReceived);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(
-                        $"Could not deserialize received message as a 'Message' instance. Received message:\n${jsonReceived}\nException:");
-                    Console.WriteLine(ex);
+//                 try
+//                 {
+//                     receivedMessage = JsonConvert.DeserializeObject<Message>(jsonReceived);
+//                 }
+//                 catch (Exception ex)
+//                 {
+//                     Console.WriteLine(
+//                         $"Could not deserialize received message as a 'Message' instance. Received message:\n${jsonReceived}\nException:");
+//                     Console.WriteLine(ex);
 
-                    return new string[0];
-                }
+//                     return new string[0];
+//                 }
 
-                RunTestsMessage runTestsMessage;
+//                 RunTestsMessage runTestsMessage;
 
-                try
-                {
-                    runTestsMessage = receivedMessage.Payload.ToObject<RunTestsMessage>();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(
-                        $"Could not deserialize received payload as a 'RunTestsMessage' instance. Received payload:\n${receivedMessage.Payload}\nException:");
-                    Console.WriteLine(ex);
+//                 try
+//                 {
+//                     runTestsMessage = receivedMessage.Payload.ToObject<RunTestsMessage>();
+//                 }
+//                 catch (Exception ex)
+//                 {
+//                     Console.WriteLine(
+//                         $"Could not deserialize received payload as a 'RunTestsMessage' instance. Received payload:\n${receivedMessage.Payload}\nException:");
+//                     Console.WriteLine(ex);
 
-                    return new string[0];
-                }
+//                     return new string[0];
+//                 }
 
-                return runTestsMessage.Tests;
-            }
+//                 return runTestsMessage.Tests;
+//             }
 
-            public void TestStarted(Test test)
-            {
-                SendMessage(new Message()
-                {
-                    MessageType = testStarteMessageType,
-                    Payload = JToken.FromObject(test),
-                });
-            }
+//             public void TestStarted(Test test)
+//             {
+//                 SendMessage(new Message()
+//                 {
+//                     MessageType = testStarteMessageType,
+//                     Payload = JToken.FromObject(test),
+//                 });
+//             }
 
-            public void TestFinished(TestResult testResult)
-            {
-                SendMessage(new Message()
-                {
-                    MessageType = testResultMessageType,
-                    Payload = JToken.FromObject(testResult),
-                });
-            }
+//             public void TestFinished(TestResult testResult)
+//             {
+//                 SendMessage(new Message()
+//                 {
+//                     MessageType = testResultMessageType,
+//                     Payload = JToken.FromObject(testResult),
+//                 });
+//             }
 
-            void SendMessage(Message message)
-            {
-                string serialized = JsonConvert.SerializeObject(message);
+//             void SendMessage(Message message)
+//             {
+//                 string serialized = JsonConvert.SerializeObject(message);
 
-                channel.Send(serialized);
-            }
+//                 channel.Send(serialized);
+//             }
 
-            readonly INetworkChannel channel;
+//             readonly INetworkChannel channel;
 
-            const string waitCommandMessageType = "TestRunner.WaitingCommand";
-            const string testStarteMessageType = "TestExecution.TestStarted";
-            const string testResultMessageType = "TestExecution.TestResult";
-            const string testCompletedMessageType = "TestRunner.TestCompleted";
-        }
-    }
-}
+//             const string waitCommandMessageType = "TestRunner.WaitingCommand";
+//             const string testStarteMessageType = "TestExecution.TestStarted";
+//             const string testResultMessageType = "TestExecution.TestResult";
+//             const string testCompletedMessageType = "TestRunner.TestCompleted";
+//         }
+//     }
+// }

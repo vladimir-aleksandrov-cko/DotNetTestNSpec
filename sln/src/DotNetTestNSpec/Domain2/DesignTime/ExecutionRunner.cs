@@ -1,72 +1,72 @@
-﻿using DotNetTestNSpec.Domain.Library;
-using Microsoft.Extensions.Testing.Abstractions;
-using NSpec.Api.Discovery;
-using System.Collections.Generic;
+﻿// using DotNetTestNSpec.Domain.Library;
+// using Microsoft.Extensions.Testing.Abstractions;
+// using NSpec.Api.Discovery;
+// using System.Collections.Generic;
 
-namespace DotNetTestNSpec.Domain.DesignTime
-{
-    public class ExecutionRunner : ITestRunner
-    {
-        public ExecutionRunner(string testAssemblyPath, INspecController controllerProxy,
-            IExecutionAdapter adapter)
-        {
-            this.testAssemblyPath = testAssemblyPath;
-            this.controllerProxy = controllerProxy;
-            this.adapter = adapter;
-        }
+// namespace DotNetTestNSpec.Domain.DesignTime
+// {
+//     public class ExecutionRunner : ITestRunner
+//     {
+//         public ExecutionRunner(string testAssemblyPath, INspecController controllerProxy,
+//             IExecutionAdapter adapter)
+//         {
+//             this.testAssemblyPath = testAssemblyPath;
+//             this.controllerProxy = controllerProxy;
+//             this.adapter = adapter;
+//         }
 
-        public int Start()
-        {
-            using (var connection = adapter.Connect())
-            {
-                var requestedTestFullNames = connection.GetTests();
+//         public int Start()
+//         {
+//             using (var connection = adapter.Connect())
+//             {
+//                 var requestedTestFullNames = connection.GetTests();
 
-                var sink = new Sink(connection);
+//                 var sink = new Sink(connection);
 
-                controllerProxy.RunInteractive(testAssemblyPath, requestedTestFullNames, sink);
-            }
+//                 controllerProxy.RunInteractive(testAssemblyPath, requestedTestFullNames, sink);
+//             }
 
-            return dontCare;
-        }
+//             return dontCare;
+//         }
 
-        readonly string testAssemblyPath;
-        readonly INspecController controllerProxy;
-        readonly IExecutionAdapter adapter;
+//         readonly string testAssemblyPath;
+//         readonly INspecController controllerProxy;
+//         readonly IExecutionAdapter adapter;
 
-        const int dontCare = -1;
+//         const int dontCare = -1;
 
-        public class Sink : IExecutionSink
-        {
-            public Sink(IExecutionConnection connection)
-            {
-                this.connection = connection;
+//         public class Sink : IExecutionSink
+//         {
+//             public Sink(IExecutionConnection connection)
+//             {
+//                 this.connection = connection;
 
-                exampleMapper = new ExampleMapper();
+//                 exampleMapper = new ExampleMapper();
 
-                startedTestMap = new Dictionary<string, Test>();
-            }
+//                 startedTestMap = new Dictionary<string, Test>();
+//             }
 
-            public void ExampleStarted(DiscoveredExample example)
-            {
-                var test = exampleMapper.MapToTest(example);
+//             public void ExampleStarted(DiscoveredExample example)
+//             {
+//                 var test = exampleMapper.MapToTest(example);
 
-                startedTestMap[example.FullName] = test;
+//                 startedTestMap[example.FullName] = test;
 
-                connection.TestStarted(test);
-            }
+//                 connection.TestStarted(test);
+//             }
 
-            public void ExampleCompleted(ExecutedExample example)
-            {
-                var test = startedTestMap[example.FullName];
+//             public void ExampleCompleted(ExecutedExample example)
+//             {
+//                 var test = startedTestMap[example.FullName];
 
-                var testResult = exampleMapper.MapToTestResult(example, test);
+//                 var testResult = exampleMapper.MapToTestResult(example, test);
 
-                connection.TestFinished(testResult);
-            }
+//                 connection.TestFinished(testResult);
+//             }
 
-            readonly IExecutionConnection connection;
-            readonly ExampleMapper exampleMapper;
-            readonly IDictionary<string, Test> startedTestMap;
-        }
-    }
-}
+//             readonly IExecutionConnection connection;
+//             readonly ExampleMapper exampleMapper;
+//             readonly IDictionary<string, Test> startedTestMap;
+//         }
+//     }
+// }

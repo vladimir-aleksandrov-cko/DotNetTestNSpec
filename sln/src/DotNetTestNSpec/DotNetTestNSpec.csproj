@@ -2,8 +2,8 @@
   <PropertyGroup>
     <VersionPrefix>0.2.1.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
-    <AssemblyName>dotnet-test-nspec</AssemblyName>
-    <PackageId>DotNetTestNSpec</PackageId>
+    <AssemblyName>NspecTestAdapter</AssemblyName>
+    <PackageId>NspecTestAdapter</PackageId>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -18,7 +18,6 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Testing.Abstractions" Version="1.0.0-preview2-003121"/>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1"/>
     <PackageReference Include="nspec" Version="3.1.0"/>
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.8.0"/>

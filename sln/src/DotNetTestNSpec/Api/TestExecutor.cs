@@ -3,9 +3,11 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
+using static DotNetTestNSpec.Domain.Constants;
+
 namespace DotNetTestNSpec.Api
 {
-    [ExtensionUri(Constants.ExecutorUriString)]
+    [ExtensionUri(ExecutorUriString)]
     public class TestExecutor : ITestExecutor
     {
         public void Cancel()

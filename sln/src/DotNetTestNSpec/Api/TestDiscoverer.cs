@@ -1,16 +1,19 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using DotNetTestNSpec.Domain;
 using DotNetTestNSpec.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
+using static DotNetTestNSpec.Domain.Constants;
+
 namespace DotNetTestNSpec.Api
 {
-    [FileExtension(Constants.DllExtension)]
-    [FileExtension(Constants.ExeExtension)]
-    [DefaultExecutorUri(Constants.ExecutorUriString)]
+    [FileExtension(DllExtension)]
+    [FileExtension(ExeExtension)]
+    [DefaultExecutorUri(ExecutorUriString)]
     public class TestDiscoverer : ITestDiscoverer
     {
         /// <summary>
@@ -29,13 +32,29 @@ namespace DotNetTestNSpec.Api
             var logger = new TestLogger(messageLogger);
             var controller = new NspecController();
 
+            var settingsProvider = discoveryContext.RunSettings.SettingsXml;
+            logger.Info($"SettingsXml={settingsProvider}");
+
+
             logger.Info($"{nameof(DiscoverTests)} for sources: {string.Join(";", sources)}");
 
             foreach (var binaryPath in sources)
             {
                 logger.Info($"Discovering tests in {binaryPath}");
 
-                var examples = controller.List(binaryPath);
+                foreach (var example in controller.List(binaryPath))
+                {
+                    var testCase = example.ToTestCase();
+                    logger.Info("Found TestCase --- BEGIN");
+                    logger.Info("FQDN: " + testCase.FullyQualifiedName);
+                    logger.Info("ExecutorUri: " + testCase.ExecutorUri);
+                    logger.Info("Source: " + testCase.Source);
+                    logger.Info("DisplayName: " + testCase.DisplayName);
+                    logger.Info("CodeFilePath: " + testCase.DisplayName);
+                    logger.Info("LineNumber: " + testCase.LineNumber);
+                    logger.Info("Found TestCase --- END");
+                    discoverySink.SendTestCase(testCase);
+                }
             }
         }
     }
