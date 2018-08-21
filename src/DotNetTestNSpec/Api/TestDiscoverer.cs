@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using DotNetTestNSpec.Configuration;
 using DotNetTestNSpec.Domain;
 using DotNetTestNSpec.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -32,9 +33,11 @@ namespace DotNetTestNSpec.Api
             var logger = new TestLogger(messageLogger);
             var controller = new NspecController();
 
-            var settingsProvider = discoveryContext.RunSettings.SettingsXml;
-            logger.Info($"SettingsXml={settingsProvider}");
+            var settingsProvider = discoveryContext.RunSettings.GetSettings(RunSettingsXmlNode) as IAdapterSettingsProvider;
 
+            var settings = settingsProvider?.Settings ?? new AdapterSettings("11", "11");
+
+            logger.Info($"Settings1={settings.Delimiter1}, Settings2={settings.Delimiter2}");
 
             logger.Info($"{nameof(DiscoverTests)} for sources: {string.Join(";", sources)}");
 
