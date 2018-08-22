@@ -1,9 +1,10 @@
 ﻿using DotNetTestNSpec.Domain;
-using DotNetTestNSpec.Domain.Library;
 using DotNetTestNSpec.Shared;
 using Newtonsoft.Json;
 using NSpec.Api;
 using NSpec.Api.Discovery;
+using NSpec.Api.Execution;
+using NSpec.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +12,8 @@ using System.Reflection;
 
 namespace DotNetTestNSpec.Domain
 {
-    public class NspecController : INspecController
+    public class NspecController
     {
-        const string runInteractiveMethodName = "RunInteractive";
-
-        const string unknownMethodErrorMessage =
-            "Could not find known method ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library.";
-        const string unknownResultErrorMessage =
-            "Could not convert serialized result from known method ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library." +
-            "Result: {1}.";
-        const string unknownArgumentErrorMessage =
-            "Could not convert serialized argument from known callback ({0}) in referenced NSpec assembly: " +
-            "please double check version compatibility between this runner and referenced NSpec library." +
-            "Argument: {1}.";
-
         public NspecController() => controller = new NSpec.Api.Controller();
 
         public int Run(
@@ -52,70 +39,13 @@ namespace DotNetTestNSpec.Domain
         public void RunInteractive(
             string testAssemblyPath,
             IEnumerable<string> exampleFullNames,
-            IExecutionSink sink)
+            Action<DiscoveredExample> onExampleStarted,
+            Action<ExecutedExample> onExampleCompleted)
         {
-            Action<string> onExampleStarted = jsonArg => OnExampleStarted(sink, jsonArg);
-            Action<string> onExampleCompleted = jsonArg => OnExampleCompleted(sink, jsonArg);
-
-            controller.RunInteractive(
-                testAssemblyPath,
-                exampleFullNames,
-                onExampleCompleted,
-                onExampleCompleted);
-        }
-
-        static void OnExampleStarted(IExecutionSink sink, string jsonArg)
-        {
-            DiscoveredExample example;
-
-            try
-            {
-                example = JsonConvert.DeserializeObject<DiscoveredExample>(jsonArg);
-            }
-            catch (Exception ex)
-            {
-                throw new DotNetTestNSpecException(unknownArgumentErrorMessage
-                    .With(runInteractiveMethodName + ": " + nameof(OnExampleStarted), jsonArg), ex);
-            }
-
-            sink.ExampleStarted(example);
-        }
-
-        static void OnExampleCompleted(IExecutionSink sink, string jsonArg)
-        {
-            ExecutedExample example;
-
-            try
-            {
-                example = JsonConvert.DeserializeObject<ExecutedExample>(jsonArg);
-            }
-            catch (Exception ex)
-            {
-                throw new DotNetTestNSpecException(unknownArgumentErrorMessage
-                    .With(runInteractiveMethodName + ": " + nameof(OnExampleCompleted), jsonArg), ex);
-            }
-
-            sink.ExampleCompleted(example);
-        }
-
-        static object InvokeMethod(object controller, string methodName, params object[] args)
-        {
-            var controllerType = controller.GetType();
-
-            var methodInfo = controllerType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
-
-            if (methodInfo == null)
-            {
-                throw new DotNetTestNSpecException(unknownMethodErrorMessage.With(methodName));
-            }
-
-            object result = methodInfo.Invoke(controller, args);
-
-            return result;
+            var exampleRunner = new ExampleRunner(testAssemblyPath, onExampleStarted, onExampleCompleted);
+            exampleRunner.Start(exampleFullNames);
         }
 
         readonly Controller controller;
-
-
     }
 }

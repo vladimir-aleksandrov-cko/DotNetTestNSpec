@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using DotNetTestNSpec.Configuration;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using NSpec.Api.Discovery;
+using NSpec.Api.Execution;
 
 namespace DotNetTestNSpec.Domain
 {
@@ -23,6 +24,23 @@ namespace DotNetTestNSpec.Domain
             displayName = separatorRegex.Replace(displayName, separatorReplacement);
 
             return displayName;
+        }
+
+        public static TestOutcome ToTestOutcome(this ExecutedExample example)
+        {
+            if (example.Failed) return TestOutcome.Failed;
+            if (example.Pending) return TestOutcome.Skipped;
+            return TestOutcome.Passed;
+        }
+
+        public static string ToPrintableString(this TestCase testCase)
+        {
+            return $@"FQDN: {testCase.FullyQualifiedName} 
+                      ExecutorUri: {testCase.ExecutorUri}
+                      Source: {testCase.Source}
+                      DisplayName: {testCase.DisplayName}
+                      CodeFilePath: {testCase.CodeFilePath}
+                      LineNumber: {testCase.LineNumber}";
         }
 
 

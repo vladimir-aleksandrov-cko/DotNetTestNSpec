@@ -86,14 +86,11 @@ namespace DotNetTestNSpec.Domain
                         Source = binaryPath,
                         CodeFilePath = navigationData?.FileName,
                         LineNumber = navigationData?.MinLineNumber ?? 0,
-                        ExecutorUri = new Uri(ExecutorUriString)
-
+                        ExecutorUri = new Uri(ExecutorUriString),
+                        Id = Guid.NewGuid()
                     };
-
                 }
-
             }
-
         }
     }
 }

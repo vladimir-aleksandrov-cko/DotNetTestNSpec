@@ -48,7 +48,7 @@ namespace DotNetTestNSpec.Api
                 foreach (var testCase in discoverer.Discover(binaryPath))
                 {
                     logger.Info("Found TestCase --- BEGIN");
-                    logger.Info(testCase.ToString());
+                    logger.Info(testCase.ToPrintableString());
                     logger.Info("Found TestCase --- END");
                     discoverySink.SendTestCase(testCase);
                 }
