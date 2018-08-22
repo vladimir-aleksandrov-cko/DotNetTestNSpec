@@ -31,30 +31,24 @@ namespace DotNetTestNSpec.Api
             ITestCaseDiscoverySink discoverySink)
         {
             var logger = new TestLogger(messageLogger);
-            var controller = new NspecController();
 
             var settingsProvider = discoveryContext.RunSettings.GetSettings(RunSettingsXmlNode) as IAdapterSettingsProvider;
 
-            var settings = settingsProvider?.Settings ?? new AdapterSettings("11", "11");
+            var settings = settingsProvider?.Settings ?? AdapterSettings.Default;
 
-            logger.Info($"Settings1={settings.Delimiter1}, Settings2={settings.Delimiter2}");
+            var discoverer = new BinaryPathDiscoverer(logger, settings);
 
+            logger.Info($"Using Mode {settings.Mode}");
             logger.Info($"{nameof(DiscoverTests)} for sources: {string.Join(";", sources)}");
 
             foreach (var binaryPath in sources)
             {
                 logger.Info($"Discovering tests in {binaryPath}");
 
-                foreach (var example in controller.List(binaryPath))
+                foreach (var testCase in discoverer.Discover(binaryPath))
                 {
-                    var testCase = example.ToTestCase();
                     logger.Info("Found TestCase --- BEGIN");
-                    logger.Info("FQDN: " + testCase.FullyQualifiedName);
-                    logger.Info("ExecutorUri: " + testCase.ExecutorUri);
-                    logger.Info("Source: " + testCase.Source);
-                    logger.Info("DisplayName: " + testCase.DisplayName);
-                    logger.Info("CodeFilePath: " + testCase.DisplayName);
-                    logger.Info("LineNumber: " + testCase.LineNumber);
+                    logger.Info(testCase.ToString());
                     logger.Info("Found TestCase --- END");
                     discoverySink.SendTestCase(testCase);
                 }

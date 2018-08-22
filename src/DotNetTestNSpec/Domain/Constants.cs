@@ -1,3 +1,5 @@
+using DotNetTestNSpec.Configuration;
+
 namespace DotNetTestNSpec.Domain
 {
     public static class Constants
