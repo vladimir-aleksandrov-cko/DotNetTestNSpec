@@ -69,14 +69,17 @@ namespace DotNetTestNSpec.Domain
 
                     else
                     {
-                        // We need to append a method name to make VSCode find a symbol
+                        // We need to append a method name to make Net Explorer Extension find a symbol
                         var testPostfix = exampleMethodName;
                         var match = Regex.Match(exampleMethodName, @"<(?<methodName>\S+)>");
                         if (match.Success)
                         {
                             testPostfix = match.Groups["methodName"].Value;
                         }
-                        displayName = $"{example.FullName()}{testPostfix}";
+
+                        // We also need to replace white spaces with underscore, to make tests executable
+                        // Tests are exected by passing fqdn
+                        displayName = $"{example.FullName().Trim().Replace(' ', '_')}{testPostfix}";
                     }
 
                     yield return new TestCase
