@@ -117,7 +117,9 @@ namespace DotNetTestNSpec.Api
                         {
                             var testOutcome = ex.ToTestOutcome();
                             var test = tests[ex.FullName].First();
+                            test.FullyQualifiedName = test.DisplayName;
                             frameworkHandle.RecordEnd(test, ex.ToTestOutcome());
+                            logger.Warning($"Recording Test: FQDN={test.FullyQualifiedName}, DisplayName={test.DisplayName}");
                             frameworkHandle.RecordResult(new TestResult(test) { Outcome = testOutcome });
                         }
                         catch (Exception exc)
