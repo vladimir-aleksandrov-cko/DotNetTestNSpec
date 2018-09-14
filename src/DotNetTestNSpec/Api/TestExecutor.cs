@@ -96,12 +96,7 @@ namespace DotNetTestNSpec.Api
                 logger.Warning($"# Tests to run:{testsList.Count}, {testsList.FirstOrDefault()}");
 
 
-            ExampleRunner.
-
-
-
-
-                nspecController.RunInteractive(
+            nspecController.RunInteractive(
                     binaryPath,
                     testsList,
                     ex =>
