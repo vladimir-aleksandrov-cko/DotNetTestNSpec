@@ -28,8 +28,7 @@ namespace DotNetTestNSpec.Api
         {
             var logger = new TestLogger(frameworkHandle);
 
-            var settingsProvider = runContext.RunSettings.GetSettings(RunSettingsXmlNode) as IAdapterSettingsProvider;
-
+            var settingsProvider = runContext?.RunSettings?.GetSettings(RunSettingsXmlNode) as IAdapterSettingsProvider;
             var settings = settingsProvider?.Settings ?? AdapterSettings.Default;
 
             var nspecController = new NspecController();
