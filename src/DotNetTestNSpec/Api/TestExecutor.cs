@@ -21,7 +21,41 @@ namespace DotNetTestNSpec.Api
         public void Cancel() => isCancelled = true;
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            throw new System.NotImplementedException();
+            var nspecController = new NspecController();
+            var logger = new TestLogger(frameworkHandle);
+
+            foreach (var test in tests)
+            {
+                nspecController.RunInteractive(
+                         test.Source,
+                          new[] { test.FullyQualifiedName },
+                         ex =>
+                         {
+                             try
+                             {
+                                 frameworkHandle.RecordStart(test);
+                             }
+                             catch (Exception exc)
+                             {
+                                 logger.Error($"Not found {ex.FullName}: {exc.Message}");
+                             }
+                         }
+                         ,
+                         ex =>
+                         {
+                             try
+                             {
+                                 var testOutcome = ex.ToTestOutcome();
+                                 frameworkHandle.RecordEnd(test, ex.ToTestOutcome());
+                                 logger.Warning($"Recording Test: FQDN={test.FullyQualifiedName}, DisplayName={test.DisplayName}");
+                                 frameworkHandle.RecordResult(new TestResult(test) { Outcome = testOutcome });
+                             }
+                             catch (Exception exc)
+                             {
+                                 logger.Error($"Failed to record {ex.FullName}: {exc.Message}");
+                             }
+                         });
+            }
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
@@ -51,7 +85,6 @@ namespace DotNetTestNSpec.Api
             // The adapter can then query if the test case has been filtered out using the following snippet.
 
 
-
             logger.Info($"Using Mode {settings.Mode}");
             logger.Info($"{nameof(RunTests)} for sources: {string.Join(";", sources)}");
 
@@ -68,7 +101,7 @@ namespace DotNetTestNSpec.Api
 
                 bool FilterTestCase(TestCase testCase)
                 {
-                    var result = filterExpression.MatchTestCase(testCase, (propertyName) =>
+                    var result = filterExpression?.MatchTestCase(testCase, (propertyName) =>
                         {
                             if (!supportedProperties.TryGetValue(propertyName, out var testProperty))
                             {
@@ -85,9 +118,9 @@ namespace DotNetTestNSpec.Api
                             return testCase.GetPropertyValue(testProperty);
                         });
 
-                    logger.Warning($"TestCase {testCase.DisplayName} matched: {result}. FQDN: {testCase.FullyQualifiedName}");
+                    logger.Warning($"TestCase {testCase.DisplayName} matched: {result}. FQN: {testCase.FullyQualifiedName}");
 
-                    return result;
+                    return result ?? true;
                 }
 
                 var testsList = tests.Select(k => k.Key).ToList();
@@ -95,37 +128,37 @@ namespace DotNetTestNSpec.Api
                 logger.Warning($"# Tests to run:{testsList.Count}, {testsList.FirstOrDefault()}");
 
 
-            nspecController.RunInteractive(
-                    binaryPath,
-                    testsList,
-                    ex =>
-                    {
-                        try
+                nspecController.RunInteractive(
+                        binaryPath,
+                        testsList,
+                        ex =>
                         {
-                            frameworkHandle.RecordStart(tests[ex.FullName].First());
+                            try
+                            {
+                                frameworkHandle.RecordStart(tests[ex.FullName].First());
+                            }
+                            catch (Exception exc)
+                            {
+                                logger.Error($"Not found {ex.FullName}: {exc.Message}");
+                            }
                         }
-                        catch (Exception exc)
+                        ,
+                        ex =>
                         {
-                            logger.Error($"Not found {ex.FullName}: {exc.Message}");
-                        }
-                    }
-                    ,
-                    ex =>
-                    {
-                        try
-                        {
-                            var testOutcome = ex.ToTestOutcome();
-                            var test = tests[ex.FullName].First();
-                            test.FullyQualifiedName = test.DisplayName;
-                            frameworkHandle.RecordEnd(test, ex.ToTestOutcome());
-                            logger.Warning($"Recording Test: FQDN={test.FullyQualifiedName}, DisplayName={test.DisplayName}");
-                            frameworkHandle.RecordResult(new TestResult(test) { Outcome = testOutcome });
-                        }
-                        catch (Exception exc)
-                        {
-                            logger.Error($"Failed to record {ex.FullName}: {exc.Message}");
-                        }
-                    });
+                            try
+                            {
+                                var testOutcome = ex.ToTestOutcome();
+                                var test = tests[ex.FullName].First();
+                                test.FullyQualifiedName = test.DisplayName;
+                                frameworkHandle.RecordEnd(test, ex.ToTestOutcome());
+                                logger.Warning($"Recording Test: FQDN={test.FullyQualifiedName}, DisplayName={test.DisplayName}");
+                                frameworkHandle.RecordResult(new TestResult(test) { Outcome = testOutcome });
+                            }
+                            catch (Exception exc)
+                            {
+                                logger.Error($"Failed to record {ex.FullName}: {exc.Message}");
+                            }
+                        });
             }
         }
     }
