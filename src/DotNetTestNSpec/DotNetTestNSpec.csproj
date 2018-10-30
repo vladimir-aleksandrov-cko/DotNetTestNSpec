@@ -1,11 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <VersionPrefix>0.2.1.0</VersionPrefix>
     <TargetFrameworks>netstandard1.6</TargetFrameworks>
     <AssemblyName>NspecTestAdapter</AssemblyName>
     <PackageId>NspecTestAdapter</PackageId>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);portable-net45+win8</PackageTargetFallback>
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
+    <Description>NSpec Test Adapter for .NET Core</Description>
+    <PackageProjectUrl>https://github.com/vladimir-aleksandrov-cko/DotNetTestNSpec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vladimir-aleksandrov-cko/DotNetTestNSpec</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/vladimir-aleksandrov-cko/DotNetTestNSpec/blob/master/license.txt</PackageLicenseUrl>
+    <Authors>TBD</Authors>
+    <Owners>TBD</Owners>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
