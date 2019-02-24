@@ -15,26 +15,31 @@ using NSpec.Domain.Formatters;
 namespace TestApp
 {
 
-    class MyLogger : ITestLogger
+    class ConsoleLogger : ITestLogger
     {
         public void Error(string message)
         {
+            Console.WriteLine(message);
         }
 
         public void Error(string message, Exception ex)
         {
+            Console.WriteLine(message);
         }
 
         public void Info(string message)
         {
+            Console.WriteLine(message);
         }
 
         public void Warning(string message)
         {
+            Console.WriteLine(message);
         }
 
         public void Warning(string message, Exception ex)
         {
+            Console.WriteLine(message);
         }
     }
     class Program
@@ -43,21 +48,17 @@ namespace TestApp
         {
 
             BinaryPathDiscoverer discoverer = new BinaryPathDiscoverer(
-                new MyLogger(),
+                new ConsoleLogger(),
                 AdapterSettings.Default);
 
-            var path = @"C:\Git\DotNetTestNSpec-fork\src\TestApp\bin\Debug\netcoreapp2.2\Fomo.Domain.UnitTests.dll";
 
-            var assembly = Assembly.LoadFrom(path);
-
-            var pathExists = File.Exists(path);
-            Console.WriteLine(pathExists);
-
-            var testCases = discoverer.Discover(path);
+            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
 
 
+            Console.WriteLine(assemblyLocation);
+            Console.WriteLine(File.Exists(assemblyLocation));
 
-            File.WriteAllText("c://test/examples.txt", JsonConvert.SerializeObject(testCases));
+            var testCases = discoverer.Discover(assemblyLocation).ToList();
         }
     }
 }

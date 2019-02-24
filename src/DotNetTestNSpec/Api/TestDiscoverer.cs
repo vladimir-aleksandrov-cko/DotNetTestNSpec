@@ -7,7 +7,6 @@ using DotNetTestNSpec.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-
 using static DotNetTestNSpec.Domain.Constants;
 
 namespace DotNetTestNSpec.Api
@@ -47,9 +46,6 @@ namespace DotNetTestNSpec.Api
 
                 foreach (var testCase in discoverer.Discover(binaryPath))
                 {
-                    logger.Info("Found TestCase --- BEGIN");
-                    logger.Info(testCase.ToPrintableString());
-                    logger.Info("Found TestCase --- END");
                     discoverySink.SendTestCase(testCase);
                 }
             }

@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using DotNetTestNSpec.Configuration;
 using DotNetTestNSpec.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Newtonsoft.Json;
 using NSpec.Api.Discovery;
 using NSpec.Domain;
 
@@ -47,6 +48,7 @@ namespace DotNetTestNSpec.Domain
                     var methodInfo = example.BodyMethodInfo;
                     var specClassName = methodInfo.DeclaringType.FullName;
                     var exampleMethodName = methodInfo.Name;
+                    var foundAsyncNavData = false;
 
                     var navigationData = diaSession.GetNavigationData(specClassName, exampleMethodName);
 
@@ -57,6 +59,7 @@ namespace DotNetTestNSpec.Domain
                         if (stateMachineClassName != null)
                         {
                             navigationData = diaSession.GetNavigationData(stateMachineClassName, "MoveNext");
+                            foundAsyncNavData = true;
                         }
                     }
 
@@ -81,6 +84,23 @@ namespace DotNetTestNSpec.Domain
                         // Tests are exected by passing fqdn
                         displayName = $"{example.FullName().Trim().Replace(' ', '_')}{testPostfix}";
                     }
+
+
+                    var exampleInfo = new
+                    {
+                        FullName = example.FullName(),
+                        Async = example.IsAsync,
+                        foundAsyncNavData = foundAsyncNavData,
+                        Type = example.GetType().Name,
+                        MethodName = example.BodyMethodInfo.Name,
+                        FileName = navigationData.FileName,
+                        MinLineNumber = navigationData.MinLineNumber,
+                        MaxLineNumber = navigationData.MaxLineNumber,
+                        SpecClassName = specClassName,
+                    };
+
+                    _logger.Info(JsonConvert.SerializeObject(exampleInfo));
+
 
                     yield return new TestCase
                     {
