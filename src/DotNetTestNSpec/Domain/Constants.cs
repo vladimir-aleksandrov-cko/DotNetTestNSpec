@@ -8,5 +8,7 @@ namespace DotNetTestNSpec.Domain
         public const string ExeExtension = ".exe";
         public const string ExecutorUriString = "executor://nspectestexecutor";
         public const string RunSettingsXmlNode = "NspecTestAdapter";
+        public const string NspecTagPropertyId = "NspecAdapter.Tag";
+        public const string NspecTagPropertyLabel = "Tag";
     }
 }

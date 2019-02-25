@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
+using DotNetTestNSpec.Api;
 using DotNetTestNSpec.Configuration;
 using DotNetTestNSpec.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -48,20 +49,24 @@ namespace DotNetTestNSpec.Domain
                     var methodInfo = example.BodyMethodInfo;
                     var specClassName = methodInfo.DeclaringType.FullName;
                     var exampleMethodName = methodInfo.Name;
-                    var foundAsyncNavData = false;
 
-                    var navigationData = diaSession.GetNavigationData(specClassName, exampleMethodName);
+                    DiaNavigationData navigationData = null;
 
-                    if (string.IsNullOrWhiteSpace(navigationData?.FileName) || navigationData?.MaxLineNumber == int.MaxValue)
+                    if (!example.IsAsync)
                     {
-                        var stateMachineClassName = AsyncMethodHelper.GetClassNameForAsyncMethod(assembly, specClassName, exampleMethodName);
+                        navigationData = diaSession.GetNavigationData(specClassName, exampleMethodName);
+                    }
+                    else
+                    {
+                        var stateMachineClassName = AsyncMethodHelper.GetClassNameForAsyncMethod(
+                            assembly, specClassName, exampleMethodName);
 
                         if (stateMachineClassName != null)
                         {
                             navigationData = diaSession.GetNavigationData(stateMachineClassName, "MoveNext");
-                            foundAsyncNavData = true;
                         }
                     }
+
 
                     string displayName;
 
@@ -86,23 +91,11 @@ namespace DotNetTestNSpec.Domain
                     }
 
 
-                    var exampleInfo = new
-                    {
-                        FullName = example.FullName(),
-                        Async = example.IsAsync,
-                        foundAsyncNavData = foundAsyncNavData,
-                        Type = example.GetType().Name,
-                        MethodName = example.BodyMethodInfo.Name,
-                        FileName = navigationData.FileName,
-                        MinLineNumber = navigationData.MinLineNumber,
-                        MaxLineNumber = navigationData.MaxLineNumber,
-                        SpecClassName = specClassName,
-                    };
-
-                    _logger.Info(JsonConvert.SerializeObject(exampleInfo));
 
 
-                    yield return new TestCase
+
+
+                    var testCase = new TestCase
                     {
                         FullyQualifiedName = example.FullName(),
                         DisplayName = displayName,
@@ -112,6 +105,28 @@ namespace DotNetTestNSpec.Domain
                         ExecutorUri = new Uri(ExecutorUriString),
                         Id = Guid.NewGuid()
                     };
+
+
+                    string tags = string.Join(";", example.Tags);
+                    testCase.SetPropertyValue(TestExecutor.TagProperty, string.Join(";", example.Tags));
+
+                    var exampleInfo = new
+                    {
+                        FullName = example.FullName(),
+                        Async = example.IsAsync,
+                        Type = example.GetType().Name,
+                        MethodName = example.BodyMethodInfo.Name,
+                        FileName = navigationData.FileName,
+                        MinLineNumber = navigationData.MinLineNumber,
+                        MaxLineNumber = navigationData.MaxLineNumber,
+                        SpecClassName = specClassName,
+                        Tags = tags
+                    };
+
+                    _logger.Info(JsonConvert.SerializeObject(exampleInfo));
+
+
+                    yield return testCase;
                 }
             }
         }

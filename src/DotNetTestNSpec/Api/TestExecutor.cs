@@ -17,6 +17,9 @@ namespace DotNetTestNSpec.Api
     [ExtensionUri(ExecutorUriString)]
     public class TestExecutor : ITestExecutor
     {
+        public static readonly TestProperty TagProperty = TestProperty.Register(
+            NspecTagPropertyId, NspecTagPropertyLabel, typeof(string), TestPropertyAttributes.Hidden, typeof(TestCase));
+
         private bool isCancelled;
         public void Cancel() => isCancelled = true;
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
@@ -71,7 +74,8 @@ namespace DotNetTestNSpec.Api
             var supportedProperties =
               new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
               {
-                  [TestCaseProperties.FullyQualifiedName.Label] = TestCaseProperties.FullyQualifiedName
+                  [TestCaseProperties.FullyQualifiedName.Label] = TestCaseProperties.FullyQualifiedName,
+                  [NspecTagPropertyLabel] = TagProperty
               };
 
             var filterExpression = runContext
