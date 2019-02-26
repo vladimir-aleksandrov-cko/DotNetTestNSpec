@@ -67,7 +67,6 @@ namespace DotNetTestNSpec.Domain
                         }
                     }
 
-
                     string displayName;
 
                     if (_runSettings.Mode == DisplayNameMode.Beautify)
@@ -91,10 +90,6 @@ namespace DotNetTestNSpec.Domain
                     }
 
 
-
-
-
-
                     var testCase = new TestCase
                     {
                         FullyQualifiedName = example.FullName(),
@@ -116,9 +111,9 @@ namespace DotNetTestNSpec.Domain
                         Async = example.IsAsync,
                         Type = example.GetType().Name,
                         MethodName = example.BodyMethodInfo.Name,
-                        FileName = navigationData.FileName,
-                        MinLineNumber = navigationData.MinLineNumber,
-                        MaxLineNumber = navigationData.MaxLineNumber,
+                        FileName = navigationData?.FileName,
+                        MinLineNumber = navigationData?.MinLineNumber ?? 0,
+                        MaxLineNumber = navigationData?.MaxLineNumber ?? 0,
                         SpecClassName = specClassName,
                         Tags = tags
                     };
