@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
@@ -87,6 +88,7 @@ namespace DotNetTestNSpec.Domain
                         // We also need to replace white spaces with underscore, to make tests executable
                         // Tests are exected by passing fqdn
                         displayName = $"{example.FullName().Trim().Replace(' ', '_')}{testPostfix}";
+                        displayName = Path.GetFileNameWithoutExtension(binaryPath) + "." + displayName;
                     }
 
 
