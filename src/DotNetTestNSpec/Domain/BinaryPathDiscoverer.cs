@@ -48,19 +48,25 @@ namespace DotNetTestNSpec.Domain
                 foreach (var example in examples)
                 {
                     var methodInfo = example.BodyMethodInfo;
-                    var specClassName = methodInfo.DeclaringType.FullName;
+                    var specClass = methodInfo.DeclaringType;
+
+                    if (specClass.IsConstructedGenericType)
+                    {
+                        specClass = specClass.GetGenericTypeDefinition();
+                    }
+
                     var exampleMethodName = methodInfo.Name;
 
                     DiaNavigationData navigationData = null;
 
                     if (!example.IsAsync)
                     {
-                        navigationData = diaSession.GetNavigationData(specClassName, exampleMethodName);
+                        navigationData = diaSession.GetNavigationData(specClass.FullName, exampleMethodName);
                     }
                     else
                     {
                         var stateMachineClassName = AsyncMethodHelper.GetClassNameForAsyncMethod(
-                            assembly, specClassName, exampleMethodName);
+                            assembly, specClass.FullName, exampleMethodName);
 
                         if (stateMachineClassName != null)
                         {
@@ -116,7 +122,7 @@ namespace DotNetTestNSpec.Domain
                         FileName = navigationData?.FileName,
                         MinLineNumber = navigationData?.MinLineNumber ?? 0,
                         MaxLineNumber = navigationData?.MaxLineNumber ?? 0,
-                        SpecClassName = specClassName,
+                        SpecClassName = specClass,
                         Tags = tags
                     };
 
